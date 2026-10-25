@@ -10,7 +10,7 @@
  */
 
 const LEDGER = "Ledger";
-const HEADERS = ["submitted_at", "household", "adults", "children", "condition", "condition_other", "notes"];
+const HEADERS = ["submitted_at", "household", "adults", "children", "condition", "condition_other", "guest_notes", "host_notes"];
 const CONDITIONS = ["alive", "undead", "between", "other"];
 const DUPLICATE_WINDOW_MS = 10 * 60 * 1000;
 
@@ -23,7 +23,7 @@ function setup() {
   }
   sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight("bold");
   sh.setFrozenRows(1);
-  sh.setColumnWidth(1, 190); sh.setColumnWidth(2, 220); sh.setColumnWidth(7, 260);
+  sh.setColumnWidth(1, 190); sh.setColumnWidth(2, 220); sh.setColumnWidth(7, 300); sh.setColumnWidth(8, 260);
 
   let totals = ss.getSheetByName("Totals");
   if (!totals) totals = ss.insertSheet("Totals");
@@ -46,6 +46,21 @@ function setup() {
 function ledger_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   return ss.getSheetByName(LEDGER) || ss.getSheets()[0];
+}
+
+// Make sure the header row has the guest_notes and host_notes columns (older sheets had a single "notes").
+function ensureHeaders_(sh) {
+  const row = sh.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  if (row[6] !== "guest_notes" || row[7] !== "host_notes") {
+    sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight("bold");
+  }
+}
+
+// Guests type free text. A leading = + - or @ would make Sheets treat it as a formula, so neutralise it.
+function safe_(v, max) {
+  let t = String(v == null ? "" : v).replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max);
+  if (/^[=+\-@]/.test(t)) t = "'" + t;
+  return t;
 }
 
 function json_(obj) {
@@ -90,15 +105,17 @@ function doPost(e) {
     catch (err) { body = (e && e.parameter) || {}; }
 
     const household = String(body.household || "").trim().replace(/\s+/g, " ");
+    const notes = safe_(body.notes, 300);
     if (household.length < 2) return json_({ ok: false, error: "name" });
     if (household.length > 40) return json_({ ok: false, error: "name_length" });
     const adults = clampInt_(body.adults, 0, 8);
     const children = clampInt_(body.children, 0, 8);
     if (adults + children < 1) return json_({ ok: false, error: "nobody" });
     const condition = CONDITIONS.indexOf(String(body.condition)) >= 0 ? String(body.condition) : "other";
-    const other = condition === "other" ? String(body.condition_other || "").trim().slice(0, 40) : "";
+    const other = condition === "other" ? safe_(body.condition_other, 40) : "";
 
     const sh = ledger_();
+    ensureHeaders_(sh);
     const last = sh.getLastRow();
     const now = new Date();
     if (last >= 2) {
@@ -112,7 +129,7 @@ function doPost(e) {
       }
     }
     const stamp = Utilities.formatDate(now, "Australia/Perth", "yyyy-MM-dd'T'HH:mm:ss+08:00");
-    sh.appendRow([stamp, household, adults, children, condition, other]);
+    sh.appendRow([stamp, safe_(household, 40), adults, children, condition, other, notes]);
     SpreadsheetApp.flush();
     const agg = aggregate_();
     agg.ok = true;

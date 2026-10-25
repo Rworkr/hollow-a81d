@@ -7,7 +7,8 @@ A single-page invitation and RSVP. One `index.html` with inline CSS and vanilla 
 | File | What |
 | --- | --- |
 | `index.html` | The page. The `CONFIG` block at the top holds every date, name, string, threshold and endpoint. |
-| `assets/hollow.mp4` | The opening film, 10 seconds, loops silently. Its soundtrack plays once, from the top, on the guest's first tap while the film is in view, or from the Sound button. Browsers do not allow a page to start sound without a tap. |
+| `assets/hollow.mp4` | The opening film, 10 seconds, loops silently. Its soundtrack plays once with the film on the guest's first tap (browsers do not allow sound before a tap), fades out over the last 1.4 seconds and hands over to the background loop. |
+| `assets/ambient.m4a` | A quiet, slowed and darkened loop made from the soundtrack's opening. Plays after the soundtrack until the guest mutes. |
 | `assets/hollow-still.jpg` | A still from the film, shown when a phone refuses to autoplay (for example iPhone Low Power Mode) or the viewer prefers reduced motion. |
 | `og.jpg` | 1200 × 630 link preview image. |
 | `store/Code.gs` | The Apps Script for the Sheet. Paste-in, not deployed from here. |
@@ -43,6 +44,15 @@ Until step 6 is done the page runs in preview mode: it says so under the counter
 - Delete the test rows from the Sheet (select the rows, right-click, delete rows). Reload the page.
 
 Suggested message: "You are expected. Lord and Lady Wenzel, of Shelley Hollow, require your particulars by Thursday: [link]"
+
+## Updating the Sheet script
+
+The page sends an optional note with each RSVP. It lands in the `guest_notes` column; `host_notes` is free for you. After any change to `store/Code.gs`:
+
+1. Open the Sheet, then Extensions → Apps Script. Select all of `Code.gs`, paste the new version, save.
+2. Deploy → Manage deployments → the pencil icon → Version: **New version** → Deploy.
+
+The web app address stays the same, so the page needs no change. Until step 2 is done, the live script ignores notes; everything else keeps working.
 
 ## Reset for next year
 
