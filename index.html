@@ -18,97 +18,57 @@
 <meta name="twitter:title" content="Shelley Hollow, Saturday 31 October">
 <meta name="twitter:description" content="The Wenzel Clan invites you to Shelley Hollow and requires your particulars.">
 <meta name="twitter:image" content="og.jpg">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='11' cy='16' r='4' fill='%23FFD15C'/%3E%3Ccircle cx='21' cy='16' r='4' fill='%23FFD15C'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='11' cy='16' r='4' fill='%23F2801E'/%3E%3Ccircle cx='21' cy='16' r='4' fill='%23F2801E'/%3E%3C/svg%3E">
 
 <script>
 /* =========================================================================
    CONFIG. Everything that changes from year to year lives here.
-   Next year: edit this block, clear the Sheet, redeploy.
+   Next year: edit this block, clear the Sheet, commit.
    ========================================================================= */
 const CONFIG = {
   house: "Shelley Hollow",
   clan: "The Wenzel Clan",
-  hosts: "Lord and Lady Wenzel",
-  heirs: "The three young Masters Wenzel",
 
   headline: "YOU ARE EXPECTED.",          // alternative: "THE HOLLOW IS RECEIVING."
   dateLong: "Saturday, 31 October 2026",
   dateShort: "Sat 31 Oct",
   timeShort: "from 7pm",
-  timeWords: "seven in the evening",
-
-  // Calendar event (local time, Australia/Perth, UTC+8, no daylight saving)
-  eventTitle: "Shelley Hollow, Halloween",
-  eventStart: "20261031T190000",
-  eventEnd:   "20261031T235900",
-  eventTz:    "Australia/Perth",
-  eventDescription: "You are expected. Dress: strictly not yourself.",
 
   rsvpClose: "Thursday 29 October 2026",
 
-  address: "3 Doric Street, Shelley",
-  addressFull: "3 Doric Street, Shelley WA 6148",
-  addressShort: "3 Doric St, Shelley",
-  mapsApple:  "https://maps.apple.com/?q=3+Doric+Street+Shelley+WA+6148",
-  mapsGoogle: "https://maps.google.com/?q=3+Doric+Street,+Shelley+WA+6148",
+  addressLine: "Shelley Hollow - 3 Doric Street, Shelley",   // bold, centred, lore mode
+  addressFull: "3 Doric Street, Shelley WA 6148",             // plain mode
+  addressShort: "3 Doric St, Shelley",                        // footer
 
   filmLine: true,          // the "after eleven" paragraph
-  gothicHouse: true,       // the save-the-date's house, small, on a rise behind the trees
+
+  video: "assets/hollow.mp4",
+  videoStill: "assets/hollow-still.jpg",   // shown if the phone will not autoplay, or under reduced motion
 
   // Store. The Apps Script web app URL, ending in /exec.
-  // Leave empty for preview mode: answers stay in this browser only and the page says so.
+  // Leave empty for preview mode: answers stay in this browser only.
   endpoint: "https://script.google.com/macros/s/AKfycbwwdVQYWbcQB9DUPx7PJw-MlN84UJwz-rpDPTX6F_ZY-bfCoUMvilHgJCspEpUXuxn5iQ/exec",
-
-  maxHouseholds: 20,       // figures stop after this many; the counter keeps counting
-  lights: { downstairs: 2, upstairs: 4, candle: 7, crows: 10, door: 15 },
-
-  // Lawn slots, filled in order of arrival. x,y are feet positions in the scene (viewBox 480 x 420).
-  bands: [
-    { name: "tree line",     slots: [[62,404],[418,404],[112,398]] },
-    { name: "mid-lawn",      slots: [[84,370],[402,372],[140,366]] },
-    { name: "near house",    slots: [[70,324],[412,324],[118,318],[364,318]] },
-    { name: "front path",    slots: [[212,400],[270,388],[218,374],[264,360],[240,344]] },
-    { name: "under columns", slots: [[146,304],[336,304],[190,303],[290,303],[240,303]] }
-  ],
-
-  remarkEvery: 8000,
-  remarks: [
-    "The Steward has counted the guests twice. The numbers disagree.",
-    "Someone has been standing by the palm since Tuesday. Nobody has asked.",
-    "The Lady has requested more fog. The fog is on its way.",
-    "The heirs have been told not to wave. They are waving.",
-    "The Lord is rehearsing his welcome. It is getting worse.",
-    "A crow tried to RSVP. The Steward declined on its behalf.",
-    "Mind the third step. The third step minds you.",
-    "The front door is green. It was not always green.",
-    "The bats are not decorations. The Steward wishes they were.",
-    "If someone calls your name from the balcony, it is the Lady. Probably.",
-    "The Steward does not sleep. The Steward is, however, tired.",
-    "Please do not feed the hedge.",
-    "The House remembers everyone who walks up the path. It is rarely impressed.",
-    "There is a seat by the Hellfire with your name on it. The Steward will not say who sat there last."
-  ],
 
   copy: {
     lore: {
-      empty: "The grounds are empty. The Steward finds this suspicious.",
-      counter: "On the grounds: {N} {households}. The living {a}, the departed {u}, the undecided {b}{other}. Small ones among them: {c}.",
-      counterOther: ", the unclassified {o}",
+      awaits: "The Steward awaits your particulars.",
       toggle: "The Steward can speak plainly, if asked.",
       toggleButton: "Speak plainly",
       cta: "Surrender your particulars",
+      ctaDone: "Particulars received",
+      // Each inner array is one paragraph; each string in it is one line.
       invitation: [
         ["Lord and Lady Wenzel, of Shelley Hollow, who have not been entirely alive for some years and see no reason to let that interfere with hospitality, request the pleasure of your company, and your continued existence, for one night."],
-        ["The gates open at seven in the evening. Arrive when the fog permits.", "{address} {maps}"],
+        ["The gates open at seven in the evening. Arrive when the fog permits."],
+        ["@address"],
         ["There will be sustenance. Some of it will be fresh.", "Tributes are welcome at the door: anything once alive, recently alive, or alive enough to pour."],
         ["A Hellfire will be lit in the grounds. Be there."],
         ["Children of the dead are especially welcome.", "The three young Masters Wenzel, all of whom are somewhat alive, will be hosting them, under a supervision that is, at best, spectral."],
         ["Expect eerie games, strangers worth meeting, and a House that takes an interest in you."],
-        ["Dress: strictly not yourself.", "It need not be elaborate. It must be an attempt.", "A borrowed cloak counts. Face paint counts. A sheet with two holes counts.", "Arriving as an ordinary, living, unaltered person is the one thing the House cannot accommodate. The Steward will have no choice, and the Steward is sorry about the mess."],
-        ["@film", "Later, after eleven, if the spirit holds: an eerie tale in moving pictures, for those merely alive and not yet tired of it.", "Not promised. Suggested."]
+        ["Dress: strictly not yourself. It need not be elaborate. It must be an attempt. Arriving as an ordinary, living, unaltered person is the one thing the House cannot accommodate. The Steward will have no choice, and the Steward is sorry about the mess."],
+        ["@film", "Later, after eleven, if the spirit holds: an eerie tale in moving pictures, for those merely alive and not yet tired of it. Suggested."]
       ],
-      signoff: ["The Wenzel Clan", "(The Steward did the typing.)"],
-      calendar: "Add to calendar",
+      signoff: "The Wenzel Clan",
       form: {
         heading: "The Steward requires your particulars.",
         household: "Household", householdPlaceholder: "The Addams party",
@@ -117,17 +77,28 @@ const CONFIG = {
         chips: { alive: "Alive", undead: "Undead", between: "Somewhere in between", other: "Other" },
         otherLabel: "Explain briefly. The Steward is listening.",
         submit: "Surrender particulars",
+        sending: "The Steward is writing…",
         smallPrint: "The ledger closes on {close}. Particulars are seen by the Clan and nobody else."
       },
-      received: "Particulars received.",
-      again: "The Steward will take another household, if one is standing behind you.",
+      // The admission slip shown after a successful RSVP
+      slip: {
+        stamp: "ADMITTED",
+        entry: "The ledger · entry No. {n}",
+        entryNoNumber: "The ledger · new entry",
+        adultsOne: "1 fully grown", adultsMany: "{n} fully grown",
+        childrenNone: "no small ones", childrenOne: "1 small one", childrenMany: "{n} small ones",
+        conditionNames: { alive: "Alive", undead: "Undead", between: "Somewhere in between", other: "Other" },
+        ink: "The Steward has inked you in. Ink, like the Steward, does not wash out."
+      },
+      again: "Another household standing behind you? The Steward will take them too.",
       share: "Tell the others. The Clan dislikes a quiet lawn.",
       copyLink: "Copy link", copied: "Copied. Go on, then.",
       confirmOrder: {
         first: "Noted. The {h} party is the first to answer. The Lord will be insufferable about this.",
         early: "Noted. The {h} party has been admitted to the grounds. Early. The Lady approves, quietly.",
         middle: "Noted. The {h} party has been admitted to the grounds. The Lady will want to know why it took so long.",
-        late: "Noted. The {h} party has been admitted to the grounds. The Steward is making room. The Steward is always making room."
+        late: "Noted. The {h} party has been admitted to the grounds. The Steward is making room. The Steward is always making room.",
+        unknown: "Noted. The {h} party has been admitted to the grounds."
       },
       confirmCondition: {
         alive: "Alive. For now. The House has made a note.",
@@ -140,18 +111,18 @@ const CONFIG = {
         nobody: "The Steward cannot admit nobody.",
         noName: "The Steward needs a name for the ledger. Any name. Yours, ideally.",
         tooLong: "The Steward's ledger has narrow columns. Forty letters, at most.",
-        failed: "The Steward dropped the pen. Try once more.",
-        fog: "The fog is thick tonight. The Steward's ledger is out of reach."
-      },
-      preview: "Preview. The Steward's ledger is not connected yet; answers stay on this device."
+        failed: "The Steward dropped the pen. Try once more."
+      }
     },
     plain: {
+      awaits: "The Steward awaits your particulars.",
       toggle: "Plain enough.",
       toggleButton: "Back to the Hollow",
       cta: "RSVP",
+      ctaDone: "RSVP sent",
       rows: [
         ["When", "Saturday 31 October 2026, from 7pm. Stay as long as you like."],
-        ["Where", "{address} {maps}"],
+        ["Where", "@address"],
         ["Food and drink", "Provided. A plate or a bottle is welcome, not required."],
         ["Fire", "We light the fire pit in the backyard later in the evening. Don't miss it."],
         ["Children", "Very welcome. Adults and children are together all night. Our three boys will be there; expect ages around 8 to 16."],
@@ -160,7 +131,6 @@ const CONFIG = {
         ["@film", "Film", "Possibly a spooky film after 11pm if people are still around. Not guaranteed."],
         ["RSVP", "By {close}, using the form below. One reply per household."]
       ],
-      calendar: "Add to calendar",
       form: {
         heading: "RSVP",
         household: "Household name", householdPlaceholder: "The Addams party",
@@ -169,35 +139,39 @@ const CONFIG = {
         chips: { alive: "Alive", undead: "Undead", between: "In between", other: "Other" },
         otherLabel: "Tell us briefly",
         submit: "Send RSVP",
+        sending: "Sending…",
         smallPrint: "RSVPs close on {close}. Only the hosts see your details."
       },
-      received: "RSVP sent.",
+      slip: {
+        stamp: "RECEIVED",
+        entry: "RSVP No. {n}",
+        entryNoNumber: "RSVP received",
+        adultsOne: "1 adult", adultsMany: "{n} adults",
+        childrenNone: "no children", childrenOne: "1 child", childrenMany: "{n} children",
+        conditionNames: { alive: "Alive", undead: "Undead", between: "In between", other: "Other" },
+        ink: "Thanks, {h}. You're on the list. See you on Saturday."
+      },
       again: "Another household on the same phone? Send another RSVP.",
       share: "Share this invitation with the others.",
       copyLink: "Copy link", copied: "Copied.",
-      confirm: "Thanks, {h}. You're on the list: {a} {adultsWord}, {c} {childrenWord}.",
       duplicate: "We already have an RSVP from this household.",
       errors: {
         nobody: "Add at least one adult or child.",
         noName: "Please enter a household name.",
         tooLong: "Household name: 40 letters at most.",
-        failed: "That didn't send. Please try once more.",
-        fog: "The RSVP list could not be loaded. You can still send yours."
-      },
-      preview: "Preview. The RSVP store is not connected yet; answers stay on this device."
+        failed: "That didn't send. Please try once more."
+      }
     }
   }
 };
 </script>
 
 <style>
-/* Layout: one phone-width column on black. Scene first, counter and button, invitation, form, pinned footer. */
+/* Layout: one phone-width column on black. A looping film with the headline pinned over it,
+   then the Steward's line and button, the invitation, the form, a pinned footer. */
 :root {
   --black: #000000;
   --ink: #0B0B10;
-  --sky-top: #0A0E1A;
-  --sky-mid: #2A3340;
-  --sky-low: #5E6B7A;
   --orange: #F2801E;
   --orange-deep: #D86010;
   --white: #F2F2F2;
@@ -206,16 +180,16 @@ const CONFIG = {
   --line: #1C1F27;
   --panel: #0E1016;
   --glow: #FFD15C;
-  --glow-core: #FFF4C4;
-  --amber: #FFB347;
   --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --serif: Georgia, "Times New Roman", serif;
   --footer-h: 52px;
+  --film-h: calc(min(100vw, 480px) * 16 / 9);          /* the film is 9:16 and as wide as the column */
+  --pin-top: calc(var(--film-h) * 0.265);              /* just below the creature's eyes */
+  --pin-tail: calc(var(--pin-top) + 110px + 14vh);     /* black run after the film: the headline lingers, then scrolls away */
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { background: var(--black); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   margin: 0; background: var(--black); color: var(--white);
   font-family: var(--sans); font-size: 17px; line-height: 1.45;
@@ -228,142 +202,62 @@ button { font: inherit; }
 :focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
 [hidden] { display: none !important; }
 
-/* ---------- Scene ---------- */
-.scene {
-  position: relative; overflow: hidden; isolation: isolate;
-  min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end;
-  background: linear-gradient(180deg, var(--black) 0%, var(--sky-top) 22%, var(--sky-mid) 60%, var(--sky-low) 100%);
+/* ---------- Film with pinned headline ---------- */
+.hero { position: relative; background: var(--black); padding-bottom: var(--pin-tail); }
+.film { position: relative; width: 100%; aspect-ratio: 9 / 16; overflow: hidden; background: var(--black); }
+.film video, .film img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.film img { opacity: 0; transition: opacity 0.6s ease; }
+.film.still img { opacity: 1; }
+.film::after { /* soft fade into the black below, so the film's lower edge never shows */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 18%;
+  background: linear-gradient(180deg, rgba(0,0,0,0), var(--black)); pointer-events: none;
 }
-.eyes {
-  position: absolute; left: 50%; top: 17%; width: 84%; max-width: 520px; height: auto; transform: translateX(-50%);
-  opacity: 0; pointer-events: none; z-index: 0;
-  animation: eyes-in 1.5s ease-out 0.3s forwards;
-}
-@keyframes eyes-in { to { opacity: 0.25; } }
-.flash { position: absolute; inset: 0; background: #C9D4E6; opacity: 0; pointer-events: none; z-index: 3; mix-blend-mode: screen; }
-.flash.go { animation: flash 0.45s ease-out 0.9s 1; }
-@keyframes flash { 0% { opacity: 0; } 25% { opacity: 0.32; } 55% { opacity: 0.06; } 100% { opacity: 0; } }
-
-.head { position: relative; z-index: 2; text-align: center; padding: 6vh 16px 6px; }
+.pin { position: absolute; inset: 0; pointer-events: none; padding-top: var(--pin-top); }
+.pin .head { position: sticky; top: var(--pin-top); text-align: center; padding: 0 16px; }
 .head h1 {
   margin: 0; color: var(--orange); font-weight: 800; letter-spacing: -0.02em; line-height: 1;
-  font-size: clamp(28px, 9vw, 40px); text-transform: uppercase; text-wrap: balance;
-  text-shadow: 0 2px 18px rgba(0,0,0,0.6);
+  font-size: clamp(24px, 7.6vw, 38px); text-transform: uppercase; white-space: nowrap;
+  text-shadow: 0 2px 22px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.9);
 }
-.head .house { margin: 8px 0 0; font-size: clamp(15px, 4.4vw, 19px); color: var(--white); letter-spacing: 0.02em; }
-.head .date { margin: 0; font-size: clamp(15px, 4.4vw, 19px); color: var(--white); font-weight: 600; }
+.head .house { margin: 6px 0 0; font-size: clamp(15px, 4.4vw, 19px); color: var(--white); letter-spacing: 0.02em; text-shadow: 0 1px 12px rgba(0,0,0,0.9); }
+.head .date { margin: 10px 0 0; font-size: clamp(15px, 4.4vw, 19px); color: var(--white); font-weight: 600; text-shadow: 0 1px 12px rgba(0,0,0,0.9); }
 
-.grounds { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
-.fog { position: absolute; left: -20%; right: -20%; height: 46%; bottom: 0; pointer-events: none; z-index: 2; }
-.fog i {
-  position: absolute; inset: 0; display: block; opacity: 0.55;
-  background:
-    radial-gradient(60% 55% at 20% 70%, rgba(190,200,215,0.28), transparent 70%),
-    radial-gradient(50% 50% at 65% 85%, rgba(190,200,215,0.22), transparent 70%),
-    radial-gradient(45% 45% at 90% 65%, rgba(190,200,215,0.18), transparent 70%);
-  animation: fog-a 70s linear infinite alternate;
-}
-.fog i + i {
-  opacity: 0.4;
-  background:
-    radial-gradient(55% 50% at 40% 90%, rgba(170,180,200,0.26), transparent 70%),
-    radial-gradient(45% 45% at 80% 75%, rgba(170,180,200,0.2), transparent 70%),
-    radial-gradient(40% 50% at 5% 80%, rgba(170,180,200,0.2), transparent 70%);
-  animation: fog-b 95s linear infinite alternate;
-}
-@keyframes fog-a { from { transform: translateX(-6%); } to { transform: translateX(6%); } }
-@keyframes fog-b { from { transform: translateX(5%); } to { transform: translateX(-7%); } }
-
-.bats { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-.bat { position: absolute; top: 0; left: 0; height: auto; opacity: 0.9; filter: drop-shadow(0 0 1px rgba(0,0,0,0.6)); will-change: transform; }
-
-/* ---------- Lights, by household count. Classes set on the scene SVG. ---------- */
-.win { fill: var(--ink); }
-.win-glow { opacity: 0; transition: opacity 1.2s ease; }
-.l-down .down-left .win { fill: #FFD77A; } .l-down .down-left .win-glow { opacity: 1; }
-.l-up .up-left .win, .l-up .up-right .win { fill: #FFD77A; }
-.l-up .up-left .win-glow, .l-up .up-right .win-glow { opacity: 1; }
-.candle { opacity: 0; }
-.l-candle .candle { opacity: 1; animation: candle 14s ease-in-out infinite; }
-@keyframes candle {
-  0%, 10% { transform: translateX(0); } 30%, 45% { transform: translateX(70px); }
-  60%, 72% { transform: translateX(140px); } 88%, 100% { transform: translateX(0); }
-}
-.crow-2, .crow-3 { opacity: 0; transition: opacity 1s ease; }
-.l-crows .crow-2, .l-crows .crow-3 { opacity: 1; }
-.door-light, .door-open { opacity: 0; transition: opacity 1.5s ease; }
-.l-door .door-light, .l-door .door-open { opacity: 1; }
-.door-glow { opacity: 0.55; }
-.l-door .door-glow { opacity: 1; }
-
-/* ---------- Lawn figures ---------- */
-.hh { transform-box: fill-box; }
-.hh.walk { animation: walk 2s cubic-bezier(.3,.7,.3,1) both; }
-@keyframes walk { from { transform: translateX(var(--dx, -200px)); opacity: 0.2; } to { transform: translateX(0); opacity: 1; } }
-.fig .lantern, .fig .lantern-glow { opacity: 0; transition: opacity 0.8s ease; }
-.fig .eye { opacity: 0; transition: opacity 0.8s ease; }
-.fig.alive .lantern, .fig.alive .lantern-glow { opacity: 1; }
-.fig.undead .eye { opacity: 1; }
-.fig.undead .body { transform: rotate(-6deg); transform-box: fill-box; transform-origin: 50% 100%; }
-.fig.other .body { fill: #B5BAC4; opacity: 0.6; animation: shimmer 3.2s ease-in-out infinite; }
-@keyframes shimmer { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.68; } }
-
-/* ---------- Under the scene ---------- */
-.ledger { padding-top: 14px; padding-bottom: 6px; }
-.counter { margin: 0; font-size: 16px; color: var(--white); min-height: 1.4em; }
-.preview-note { margin: 6px 0 0; font-size: 13px; color: var(--amber); }
-.remark {
-  margin: 8px 0 0; font-size: 15px; color: var(--grey); font-style: normal; min-height: 2.9em;
-  transition: opacity 0.4s ease; opacity: 1;
-}
-.remark.out { opacity: 0; }
-.cta-wrap { padding: 12px 0 8px; }
+/* ---------- Steward line and button ---------- */
+.awaits { margin: 0; padding-top: 4px; font-size: 18px; color: var(--white); text-align: center; }
+.cta-wrap { padding-top: 14px; padding-bottom: 18px; }
 .btn {
   display: block; width: 100%; min-height: 50px; border: 0; border-radius: 10px; cursor: pointer;
   background: var(--orange); color: var(--ink); font-weight: 700; font-size: 18px; letter-spacing: 0.01em;
   text-align: center; text-decoration: none; line-height: 50px; padding: 0 16px;
 }
 .btn:active { background: var(--orange-deep); }
-.btn[disabled] { opacity: 0.6; cursor: default; }
+.btn[disabled] { opacity: 0.7; cursor: default; }
+.btn.done { background: transparent; color: var(--orange); border: 1px solid var(--orange); line-height: 48px; }
 .btn-ghost {
-  text-decoration: none; display: inline-block; min-height: 44px; line-height: 42px; padding: 0 16px; border-radius: 10px; cursor: pointer;
-  background: transparent; color: var(--orange); border: 1px solid var(--orange); font-weight: 600; font-size: 16px;
+  display: inline-block; min-height: 44px; line-height: 42px; padding: 0 16px; border-radius: 10px; cursor: pointer;
+  background: transparent; color: var(--orange); border: 1px solid var(--orange); font-weight: 600; font-size: 16px; text-decoration: none;
 }
-
-/* ---------- Confirmation ---------- */
-.confirm { margin: 10px 0 6px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
-.confirm p { margin: 0 0 8px; }
-.confirm .big { font-size: 20px; line-height: 1.3; font-weight: 600; color: var(--white); }
-.confirm .lore-line { font-family: var(--serif); font-size: 18px; color: var(--white); }
-.confirm .small { font-size: 14px; color: var(--grey); }
-.share { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
-.share p { margin: 0; flex: 1 1 200px; color: var(--grey); font-size: 15px; }
-.share .status { flex-basis: 100%; font-size: 14px; color: var(--glow); min-height: 1.2em; margin: 0; }
 
 /* ---------- Invitation ---------- */
 .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0 6px; border-top: 1px solid var(--line); }
 .toggle-row p { margin: 0; font-size: 15px; color: var(--grey); }
 .toggle-row button { white-space: nowrap; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--dim); background: transparent; color: var(--white); font-size: 15px; cursor: pointer; }
-.invite { padding-bottom: 8px; }
+.invite { padding-bottom: 18px; }
 .invite.lore { font-family: var(--serif); font-size: 19px; line-height: 1.5; }
 .invite p { margin: 0 0 18px; }
 .invite .line { display: block; }
+.invite .address { text-align: center; font-family: var(--sans); font-weight: 700; font-size: 19px; line-height: 1.35; color: var(--white); padding: 6px 0; }
+.invite .address .nw { white-space: nowrap; }
 .invite .signoff { margin-top: 24px; }
-.invite .signoff .line + .line { font-family: var(--sans); font-size: 15px; color: var(--grey); }
-.invite .maplink { white-space: nowrap; }
-.invite .maplink-alt { font-family: var(--sans); font-size: 14px; color: var(--grey); white-space: nowrap; }
 .invite.plain { font-family: var(--sans); font-size: 17px; }
 .invite.plain table { border-collapse: collapse; width: 100%; }
-.invite.plain th { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; width: 32%; color: var(--grey); font-weight: 600; }
+.invite.plain th { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; width: 32%; color: var(--grey); font-weight: 600; border-top: 1px solid var(--line); }
 .invite.plain td { vertical-align: top; padding: 10px 0; border-top: 1px solid var(--line); }
-.invite.plain tr:first-child td { border-top: 0; }
-.invite.plain th { border-top: 1px solid var(--line); }
-.invite.plain tr:first-child th { border-top: 0; }
-.cal-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 4px 0 20px; }
-.cal-row .alt { font-size: 14px; color: var(--grey); }
+.invite.plain tr:first-child th, .invite.plain tr:first-child td { border-top: 0; }
+.invite.plain .addr { font-weight: 700; }
 
 /* ---------- The Steward's desk ---------- */
-.desk { border-top: 1px solid var(--line); padding-top: 18px; padding-bottom: 24px; }
+.desk { border-top: 1px solid var(--line); padding-top: 18px; padding-bottom: 28px; scroll-margin-top: 12px; }
 .desk h2 { margin: 0 0 14px; font-size: 22px; font-weight: 700; line-height: 1.2; color: var(--white); }
 .field { margin-bottom: 14px; }
 .field label, .field .lab { display: block; font-size: 14px; color: var(--grey); margin-bottom: 6px; }
@@ -389,10 +283,43 @@ button { font: inherit; }
 .other-wrap { margin-top: 12px; }
 .err { margin: 10px 0 0; color: var(--orange); font-size: 15px; min-height: 1.3em; }
 .small-print { margin: 12px 0 0; font-size: 13px; color: var(--grey); }
-.received { padding: 6px 0 0; }
-.received p { margin: 0 0 10px; font-size: 19px; }
-.received .again { font-size: 15px; color: var(--grey); }
-.received .again button { background: none; border: 0; padding: 0; color: var(--orange); text-decoration: underline; cursor: pointer; font-size: 15px; min-height: 44px; }
+
+/* ---------- Admission slip (after a successful RSVP) ---------- */
+.slip {
+  position: relative; overflow: hidden; margin-top: 4px; padding: 20px 18px 18px;
+  border: 1px solid #2A2D36; border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 31px, rgba(255,255,255,0.035) 31px 32px),
+    linear-gradient(180deg, #12141B, #0C0D12);
+}
+.slip.thud { animation: thud 0.32s ease-out 0.42s 1; }
+@keyframes thud { 0% { transform: translateY(0); } 35% { transform: translateY(3px) scale(0.995); } 100% { transform: translateY(0); } }
+.slip .entry { margin: 0 0 10px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); font-variant-numeric: tabular-nums; }
+.slip-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.slip .who { margin: 0; font-family: var(--serif); font-size: 26px; line-height: 1.15; color: var(--white); overflow-wrap: anywhere; }
+.slip .what { margin: 8px 0 0; font-size: 15px; color: var(--grey); }
+.slip .rule { height: 1px; background: #2A2D36; margin: 16px 0 14px; }
+.slip .lore-line { margin: 0 0 8px; font-family: var(--serif); font-size: 18px; color: var(--white); }
+.slip .ink { margin: 10px 0 0; font-size: 15px; color: var(--orange); }
+.stamp {
+  position: relative; z-index: 2; justify-self: end;
+  padding: 7px 9px 6px; border: 3px solid var(--orange); border-radius: 6px;
+  color: var(--orange); font-weight: 900; font-size: 15px; letter-spacing: 0.12em; line-height: 1;
+  transform: rotate(-12deg); opacity: 0.92; mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 60%, rgba(0,0,0,0.75) 61%, #000 64%);
+          mask-image: radial-gradient(circle at 30% 40%, #000 60%, rgba(0,0,0,0.75) 61%, #000 64%);
+}
+.slip.go .stamp { animation: stamp 0.45s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes stamp {
+  0% { transform: rotate(-30deg) scale(2.6); opacity: 0; }
+  60% { transform: rotate(-10deg) scale(0.92); opacity: 1; }
+  100% { transform: rotate(-12deg) scale(1); opacity: 0.92; }
+}
+.share { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.share p { margin: 0; flex: 1 1 200px; color: var(--grey); font-size: 15px; }
+.share .status { flex-basis: 100%; font-size: 14px; color: var(--glow); min-height: 1.2em; margin: 0; }
+.again { margin: 14px 0 0; }
+.again button { background: none; border: 0; padding: 0; color: var(--orange); text-decoration: underline; cursor: pointer; font-size: 15px; min-height: 44px; text-align: left; }
 
 /* ---------- Footer ---------- */
 .footer {
@@ -400,10 +327,9 @@ button { font: inherit; }
   background: rgba(0,0,0,0.92); border-top: 1px solid var(--line); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.footer .col { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: var(--footer-h); font-size: 15px; }
+.footer .col { display: flex; align-items: center; justify-content: center; min-height: var(--footer-h); font-size: 15px; }
 .footer .facts { color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .footer .facts b { font-weight: 600; }
-.footer a { color: var(--orange); font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 6px; }
 
 /* ---------- No JavaScript ---------- */
 .nojs { padding: 20px 0; }
@@ -411,214 +337,37 @@ button { font: inherit; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .eyes { animation: none; opacity: 0.25; }
-  .flash, .flash.go { animation: none; opacity: 0; }
-  .fog i, .fog i + i { animation: none; }
-  .bats { display: none; }
-  .hh.walk { animation: none; }
-  .l-candle .candle { animation: none; }
-  .fig.other .body { animation: none; }
-  .remark { transition: none; }
+  html { scroll-behavior: auto; }
+  .film img { transition: none; }
+  .slip.thud, .slip.go .stamp { animation: none; }
 }
-
-/* ---------- Poster layout for og.jpg (?og=1), 1200 x 630 ---------- */
-body.og { overflow: hidden; width: 1200px; height: 630px; padding: 0; }
-body.og .col { max-width: none; }
-body.og .scene { min-height: 630px; height: 630px; width: 1200px; }
-body.og .grounds { position: absolute; left: 0; bottom: 0; width: 1200px; height: 471px; }
-body.og .head { position: absolute; left: 0; right: 0; top: 34px; z-index: 4; padding: 0; }
-body.og .head h1 { font-size: 78px; }
-body.og .head .house, body.og .head .date { font-size: 34px; }
-body.og .head .house { margin-top: 6px; }
-body.og .eyes { width: 680px; max-width: none; top: 0; opacity: 0.3; animation: none; }
-body.og .fog { height: 30%; }
-body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og .footer, body.og .toggle-row, body.og .bats { display: none; }
 </style>
 </head>
 <body>
 
 <main class="col" id="main">
 
-  <!-- ============ The grounds ============ -->
-  <section class="scene" aria-hidden="true" id="scene">
-    <img class="eyes" src="assets/eyes-glow.webp" alt="" width="960" height="453" decoding="async">
-    <div class="flash" id="flash"></div>
-    <div class="head">
-      <h1 id="headline">YOU ARE EXPECTED.</h1>
-      <p class="house" id="headHouse">Shelley Hollow</p>
-      <p class="date" id="headDate">Saturday, 31 October 2026</p>
+  <!-- ============ The film, with the headline pinned over it ============ -->
+  <section class="hero">
+    <div class="film" id="film" aria-hidden="true">
+      <video id="video" muted loop playsinline autoplay preload="auto" disablepictureinpicture disableremoteplayback>
+        <source src="assets/hollow.mp4" type="video/mp4">
+      </video>
+      <img id="still" src="assets/hollow-still.jpg" alt="" width="720" height="1280" decoding="async">
     </div>
-    <div class="bats" id="bats"></div>
-
-    <svg class="grounds" id="grounds" viewBox="0 0 480 420" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <defs>
-        <linearGradient id="lawnGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#171A20"/><stop offset="1" stop-color="#07080A"/>
-        </linearGradient>
-        <linearGradient id="pathGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#1E222B"/><stop offset="1" stop-color="#0D0F13"/>
-        </linearGradient>
-        <linearGradient id="hazeGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#5E6B7A" stop-opacity="0"/><stop offset="1" stop-color="#7C8898" stop-opacity="0.5"/>
-        </linearGradient>
-        <radialGradient id="winGlow"><stop offset="0" stop-color="#FFE7A3" stop-opacity="0.85"/><stop offset="1" stop-color="#FFB547" stop-opacity="0"/></radialGradient>
-        <radialGradient id="doorGlow"><stop offset="0" stop-color="#FFD77A" stop-opacity="0.55"/><stop offset="1" stop-color="#FFB547" stop-opacity="0"/></radialGradient>
-        <radialGradient id="lanternGlow"><stop offset="0" stop-color="#FFC266" stop-opacity="0.75"/><stop offset="1" stop-color="#FF9A1F" stop-opacity="0"/></radialGradient>
-        <radialGradient id="eyeDot"><stop offset="0" stop-color="#FFF4C4"/><stop offset="0.5" stop-color="#FFD15C"/><stop offset="1" stop-color="#FFB020" stop-opacity="0"/></radialGradient>
-        <linearGradient id="spill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#FFD77A" stop-opacity="0.5"/><stop offset="1" stop-color="#FFD77A" stop-opacity="0"/>
-        </linearGradient>
-        <pattern id="louvre" width="4" height="3" patternUnits="userSpaceOnUse">
-          <rect width="4" height="3" fill="#0B0B10"/><rect width="4" height="1" y="2" fill="#15171E"/>
-        </pattern>
-      </defs>
-
-      <!-- Horizon haze -->
-      <rect x="-200" y="210" width="880" height="92" fill="url(#hazeGrad)"/>
-
-      <!-- Far: a rise with the save-the-date's gothic house, small, behind the trees -->
-      <g id="farHouse">
-        <path d="M-200,302 L-200,290 C-120,268 -40,262 20,262 C60,258 80,262 100,276 L120,302 Z" fill="#0F1218"/>
-        <image href="assets/house.svg" x="14" y="222" width="52" height="60" opacity="0.92"/>
-      </g>
-
-      <!-- Palm, behind the house on the right -->
-      <g fill="#0B0B10">
-        <path d="M388,300 C390,250 393,215 398,178 L402,178 C399,215 397,250 396,300 Z"/>
-        <path d="M400,180 C410,168 430,162 452,166 C436,170 418,178 404,186 Z"/>
-        <path d="M400,180 C392,164 380,154 362,150 C376,160 388,170 398,184 Z"/>
-        <path d="M400,178 C404,160 416,148 438,142 C424,152 412,166 406,182 Z"/>
-        <path d="M400,180 C388,176 372,178 356,190 C372,186 386,186 398,188 Z"/>
-        <path d="M402,180 C416,180 434,188 446,202 C432,194 416,190 404,190 Z"/>
-        <path d="M400,182 C396,196 390,206 380,214 C388,202 392,192 396,184 Z"/>
-      </g>
-
-      <!-- The house (silhouette, verticals stretched about 10 percent) -->
-      <g id="house">
-        <circle class="door-glow" cx="240" cy="296" r="30" fill="url(#doorGlow)"/>
-        <!-- roof -->
-        <path d="M112,156 L172,124 L308,124 L368,156 Z" fill="#0B0B10"/>
-        <!-- crows on the ridge -->
-        <g fill="#0B0B10">
-          <path class="crow-1" d="M236,124 l2,-5 l3,2 l4,-3 l-1,4 l3,1 l-4,1 l-1,3 l-2,-2 l-3,1 Z"/>
-          <path class="crow-2" d="M196,124 l2,-4 l3,1 l3,-3 l-1,4 l3,1 l-4,1 l-1,3 l-2,-2 l-3,1 Z"/>
-          <path class="crow-3" d="M286,124 l-2,-4 l-3,1 l-3,-3 l1,4 l-3,1 l4,1 l1,3 l2,-2 l3,1 Z"/>
-        </g>
-        <!-- wall behind the columns, a shade lighter so the colonnade reads -->
-        <rect x="118" y="156" width="244" height="146" fill="#111320"/>
-        <!-- upper windows with shutters -->
-        <g class="up-left">
-          <rect class="win-glow" x="132" y="155" width="76" height="70" fill="url(#winGlow)" rx="20"/>
-          <rect x="143" y="171" width="8" height="42" fill="url(#louvre)"/>
-          <rect class="win" x="152" y="171" width="36" height="42"/>
-          <rect x="189" y="171" width="8" height="42" fill="url(#louvre)"/>
-          <rect x="169" y="171" width="2" height="42" fill="#0B0B10"/><rect x="152" y="191" width="36" height="2" fill="#0B0B10"/>
-        </g>
-        <g class="up-right">
-          <rect class="win-glow" x="272" y="155" width="76" height="70" fill="url(#winGlow)" rx="20"/>
-          <rect x="283" y="171" width="8" height="42" fill="url(#louvre)"/>
-          <rect class="win" x="292" y="171" width="36" height="42"/>
-          <rect x="329" y="171" width="8" height="42" fill="url(#louvre)"/>
-          <rect x="309" y="171" width="2" height="42" fill="#0B0B10"/><rect x="292" y="191" width="36" height="2" fill="#0B0B10"/>
-        </g>
-        <!-- upper door onto the balcony -->
-        <rect x="229" y="170" width="22" height="48" fill="#0B0B10"/>
-        <!-- candle, drifts upstairs from 7 households -->
-        <g class="candle"><circle cx="170" cy="200" r="14" fill="url(#winGlow)"/><circle cx="170" cy="200" r="2.2" fill="#FFF4C4"/></g>
-        <!-- balcony slab and balustrade -->
-        <rect x="112" y="226" width="256" height="7" fill="#0B0B10"/>
-        <rect x="114" y="212" width="252" height="3" fill="#0B0B10"/>
-        <g fill="#0B0B10" id="balusters"></g>
-        <!-- ground floor windows -->
-        <g class="down-left">
-          <rect class="win-glow" x="132" y="234" width="76" height="70" fill="url(#winGlow)" rx="20"/>
-          <rect x="143" y="248" width="8" height="44" fill="url(#louvre)"/>
-          <rect class="win" x="152" y="248" width="36" height="44"/>
-          <rect x="189" y="248" width="8" height="44" fill="url(#louvre)"/>
-          <rect x="169" y="248" width="2" height="44" fill="#0B0B10"/><rect x="152" y="269" width="36" height="2" fill="#0B0B10"/>
-        </g>
-        <g class="down-right">
-          <rect class="win-glow" x="272" y="234" width="76" height="70" fill="url(#winGlow)" rx="20"/>
-          <rect x="283" y="248" width="8" height="44" fill="url(#louvre)"/>
-          <rect class="win" x="292" y="248" width="36" height="44"/>
-          <rect x="329" y="248" width="8" height="44" fill="url(#louvre)"/>
-          <rect x="309" y="248" width="2" height="44" fill="#0B0B10"/><rect x="292" y="269" width="36" height="2" fill="#0B0B10"/>
-        </g>
-        <!-- front door, pediment, faint glow at the threshold -->
-        <path d="M222,254 L240,246 L258,254 Z" fill="#0B0B10"/>
-        <rect class="door-open" x="228" y="258" width="24" height="44" fill="#FFD77A"/>
-        <rect x="228" y="258" width="24" height="44" fill="#0B0B10" class="door-leaf"/>
-        <rect x="239" y="258" width="2" height="44" fill="#1A1C24"/>
-        <rect x="228" y="296" width="24" height="6" fill="#2A1E0A" opacity="0.9"/>
-        <!-- six columns, full width -->
-        <g fill="#0B0B10" id="columns"></g>
-        <!-- eaves -->
-        <rect x="108" y="150" width="264" height="8" fill="#0B0B10"/>
-        <!-- steps -->
-        <path d="M214,302 L266,302 L272,312 L208,312 Z" fill="#0B0B10"/>
-      </g>
-
-      <!-- Lawn, path, light spill -->
-      <rect x="-200" y="300" width="880" height="120" fill="url(#lawnGrad)"/>
-      <path d="M226,302 L254,302 L300,420 L180,420 Z" fill="url(#pathGrad)"/>
-      <path class="door-light" d="M228,302 L252,302 L290,420 L190,420 Z" fill="url(#spill)"/>
-      <path class="door-open" d="M228,302 L252,302 L272,312 L208,312 Z" fill="#FFD77A" opacity="0.5"/>
-
-      <!-- Large bare tree, left -->
-      <g fill="none" stroke="#0B0B10" stroke-linecap="round">
-        <path d="M34,334 C36,290 32,250 30,214" stroke-width="9"/>
-        <path d="M31,236 C20,220 12,200 4,186" stroke-width="5"/>
-        <path d="M31,250 C44,232 60,220 78,208" stroke-width="5"/>
-        <path d="M30,214 C34,196 44,182 60,170" stroke-width="4"/>
-        <path d="M30,214 C24,196 18,184 10,170" stroke-width="4"/>
-        <path d="M60,170 C66,160 76,154 86,150" stroke-width="2.5"/>
-        <path d="M60,170 C56,158 54,150 52,140" stroke-width="2.5"/>
-        <path d="M78,208 C90,200 102,198 112,200" stroke-width="2.5"/>
-        <path d="M78,208 C82,196 88,188 96,182" stroke-width="2.5"/>
-        <path d="M10,170 C6,160 2,152 -4,146" stroke-width="2.5"/>
-        <path d="M4,186 C-2,180 -6,176 -12,170" stroke-width="3"/>
-        <path d="M44,232 C50,224 52,216 50,208" stroke-width="2.5"/>
-      </g>
-      <path d="M12,336 C26,328 44,328 58,336 Z" fill="#0B0B10"/>
-
-      <!-- Dead sapling, mid-lawn, leaning on its stake -->
-      <g stroke="#0B0B10" stroke-linecap="round" fill="none">
-        <path d="M312,352 L306,318" stroke-width="2.5"/>
-        <path d="M306,318 C300,312 298,306 300,300" stroke-width="2"/>
-        <path d="M307,324 C312,318 314,314 316,310" stroke-width="1.8"/>
-        <path d="M320,352 L321,322" stroke-width="2"/>
-        <path d="M309,338 L320,334" stroke-width="1.5"/>
-      </g>
-
-      <!-- Hosts at the path, left of the door -->
-      <image id="clan" href="assets/clan-and-steward.svg" x="118" y="291" width="110" height="62" preserveAspectRatio="xMidYMax meet"/>
-
-      <!-- Guests on the lawn, filled by script -->
-      <g id="lawn"></g>
-    </svg>
-    <div class="fog" aria-hidden="true"><i></i><i></i></div>
-  </section>
-
-  <!-- ============ Counter, remark, button ============ -->
-  <section class="ledger pad">
-    <p class="counter" id="counter" aria-live="polite">The grounds are empty. The Steward finds this suspicious.</p>
-    <p class="preview-note" id="previewNote" hidden></p>
-    <p class="remark" id="remark" aria-live="off"></p>
-  </section>
-  <div class="cta-wrap pad" id="ctaWrap">
-    <a class="btn" href="#desk" id="cta">Surrender your particulars</a>
-  </div>
-  <div class="pad" id="confirmWrap" hidden>
-    <div class="confirm" role="status">
-      <p class="big" id="confirmPlain" hidden></p>
-      <p class="lore-line" id="confirmLore1"></p>
-      <p class="lore-line" id="confirmLore2"></p>
-      <div class="share">
-        <p id="shareLine">Tell the others. The Clan dislikes a quiet lawn.</p>
-        <button type="button" class="btn-ghost" id="copyLink">Copy link</button>
-        <p class="status" id="copyStatus"></p>
+    <div class="pin">
+      <div class="head">
+        <h1 id="headline">YOU ARE EXPECTED.</h1>
+        <p class="house" id="headHouse">Shelley Hollow</p>
+        <p class="date" id="headDate">Saturday, 31 October 2026</p>
       </div>
     </div>
+  </section>
+
+  <!-- ============ The Steward's line and button ============ -->
+  <p class="awaits pad" id="awaits">The Steward awaits your particulars.</p>
+  <div class="cta-wrap pad">
+    <a class="btn" href="#desk" id="cta">Surrender your particulars</a>
   </div>
 
   <!-- ============ The invitation ============ -->
@@ -630,7 +379,7 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
     <noscript>
       <div class="nojs">
         <p><b>When:</b> Saturday 31 October 2026, from 7pm. Stay as long as you like.</p>
-        <p><b>Where:</b> 3 Doric Street, Shelley WA 6148. <a href="https://maps.google.com/?q=3+Doric+Street,+Shelley+WA+6148">Open in maps</a></p>
+        <p><b>Where:</b> 3 Doric Street, Shelley WA 6148.</p>
         <p><b>Food and drink:</b> Provided. A plate or a bottle is welcome, not required.</p>
         <p><b>Fire:</b> We light the fire pit in the backyard later in the evening. Don't miss it.</p>
         <p><b>Children:</b> Very welcome. Adults and children are together all night. Our three boys will be there; expect ages around 8 to 16.</p>
@@ -642,10 +391,6 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
     </noscript>
     <div class="invite lore" id="inviteLore"></div>
     <div class="invite plain" id="invitePlain" hidden></div>
-    <div class="cal-row">
-      <a class="btn-ghost" id="calLink" href="#" download="shelley-hollow.ics">Add to calendar</a>
-      <a class="alt" id="calGoogle" href="#" target="_blank" rel="noopener">Google Calendar</a>
-    </div>
   </section>
 
   <!-- ============ The Steward's desk ============ -->
@@ -661,7 +406,7 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
           <span class="lab" id="labAdults">The fully grown</span>
           <div class="stepper" role="group" aria-labelledby="labAdults">
             <button type="button" data-step="adults" data-d="-1" aria-label="Fewer adults">&minus;</button>
-            <output id="adultsOut" for="adults">2</output>
+            <output id="adultsOut">2</output>
             <button type="button" data-step="adults" data-d="1" aria-label="More adults">+</button>
           </div>
         </div>
@@ -669,7 +414,7 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
           <span class="lab" id="labChildren">The small ones</span>
           <div class="stepper" role="group" aria-labelledby="labChildren">
             <button type="button" data-step="children" data-d="-1" aria-label="Fewer children">&minus;</button>
-            <output id="childrenOut" for="children">0</output>
+            <output id="childrenOut">0</output>
             <button type="button" data-step="children" data-d="1" aria-label="More children">+</button>
           </div>
         </div>
@@ -691,9 +436,28 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
       <button type="submit" class="btn" id="submitBtn">Surrender particulars</button>
       <p class="small-print" id="smallPrint"></p>
     </form>
-    <div class="received" id="received" hidden>
-      <p id="receivedText">Particulars received.</p>
-      <p class="again"><button type="button" id="againBtn">The Steward will take another household, if one is standing behind you.</button></p>
+
+    <div id="received" hidden>
+      <div class="slip" id="slip" role="status" aria-live="polite">
+        <p class="entry" id="slipEntry"></p>
+        <div class="slip-head">
+          <div class="slip-id">
+            <p class="who" id="slipWho"></p>
+            <p class="what" id="slipWhat"></p>
+          </div>
+          <div class="stamp" id="stamp" aria-hidden="true">ADMITTED</div>
+        </div>
+        <div class="rule"></div>
+        <p class="lore-line" id="confirmLore1"></p>
+        <p class="lore-line" id="confirmLore2"></p>
+        <p class="ink" id="slipInk"></p>
+      </div>
+      <div class="share">
+        <p id="shareLine">Tell the others. The Clan dislikes a quiet lawn.</p>
+        <button type="button" class="btn-ghost" id="copyLink">Copy link</button>
+        <p class="status" id="copyStatus"></p>
+      </div>
+      <p class="again"><button type="button" id="againBtn">Another household standing behind you? The Steward will take them too.</button></p>
     </div>
   </section>
 </main>
@@ -701,7 +465,6 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
 <footer class="footer">
   <div class="col pad">
     <span class="facts" id="footerFacts"><b>Sat 31 Oct</b> · from 7pm · 3 Doric St, Shelley</span>
-    <a id="footerMap" href="https://maps.google.com/?q=3+Doric+Street,+Shelley+WA+6148" target="_blank" rel="noopener">Map</a>
   </div>
 </footer>
 
@@ -711,72 +474,40 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
   const C = CONFIG;
   const $ = (id) => document.getElementById(id);
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const params = new URLSearchParams(location.search);
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const mapsPrimary = isIOS ? C.mapsApple : C.mapsGoogle;
-  const mapsAlt = isIOS ? C.mapsGoogle : C.mapsApple;
-  const mapsAltLabel = isIOS ? "Google Maps" : "Apple Maps";
   const previewMode = !C.endpoint;
-  const LS_KEY = "hollow-ledger-" + C.eventStart.slice(0, 8);
+  const LS_KEY = "hollow-ledger-2026";
 
   let mode = "lore";
-  let agg = null;            // last aggregate from the store
   let counts = { adults: 2, children: 0 };
+  let lastConfirm = null;
 
-  /* ---------- helpers ---------- */
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fill = (tpl, map) => tpl.replace(/\{(\w+)\}/g, (m, k) => (k in map ? map[k] : m));
-  function mapsHtml() {
-    return '<a class="maplink" href="' + mapsPrimary + '" target="_blank" rel="noopener">Open in maps</a> ' +
-           '<a class="maplink-alt" href="' + mapsAlt + '" target="_blank" rel="noopener">(' + mapsAltLabel + ')</a>';
-  }
-  function seeded(seed) { // small deterministic PRNG so every viewer sees the same lawn
-    let s = (seed * 9301 + 49297) % 233280;
-    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-  }
 
   /* ---------- static text from config ---------- */
   $("headline").textContent = C.headline;
   $("headHouse").textContent = C.house;
   $("headDate").textContent = C.dateLong;
   $("footerFacts").innerHTML = "<b>" + esc(C.dateShort) + "</b> · " + esc(C.timeShort) + " · " + esc(C.addressShort);
-  $("footerMap").href = mapsPrimary;
-  if (!C.gothicHouse) $("farHouse").remove();
 
-  // columns and balusters
-  (function buildHouse() {
-    const cols = $("columns"), bal = $("balusters");
-    let h = "";
-    [124, 170, 216, 262, 308, 354].forEach((x) => { h += '<rect x="' + (x - 3.5) + '" y="158" width="7" height="144" rx="1.5"/>'; });
-    cols.innerHTML = h;
-    let b = "";
-    for (let x = 118; x <= 362; x += 8) b += '<rect x="' + x + '" y="214" width="2" height="12"/>';
-    bal.innerHTML = b;
-  })();
-
-  // calendar links
-  (function buildCalendar() {
-    const ics = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Shelley Hollow//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-      "BEGIN:VEVENT",
-      "UID:" + C.eventStart + "@shelley-hollow",
-      "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""),
-      "DTSTART;TZID=" + C.eventTz + ":" + C.eventStart,
-      "DTEND;TZID=" + C.eventTz + ":" + C.eventEnd,
-      "SUMMARY:" + C.eventTitle,
-      "LOCATION:" + C.addressFull,
-      "DESCRIPTION:" + C.eventDescription,
-      "END:VEVENT", "END:VCALENDAR"
-    ].join("\r\n");
-    $("calLink").href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
-    // Google Calendar wants UTC; Perth is UTC+8 with no daylight saving.
-    const toUtc = (s) => {
-      const d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8), +s.slice(9, 11) - 8, +s.slice(11, 13)));
-      return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    };
-    $("calGoogle").href = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-      "&text=" + encodeURIComponent(C.eventTitle) + "&dates=" + toUtc(C.eventStart) + "/" + toUtc(C.eventEnd) +
-      "&location=" + encodeURIComponent(C.addressFull) + "&details=" + encodeURIComponent(C.eventDescription);
+  /* ---------- the film ---------- */
+  (function film() {
+    const box = $("film"), v = $("video"), still = $("still");
+    still.src = C.videoStill;
+    const showStill = () => box.classList.add("still");
+    if (reduced) { v.removeAttribute("autoplay"); v.pause(); v.preload = "none"; showStill(); return; }
+    v.muted = true;
+    const p = v.play();
+    if (p && p.catch) p.catch(showStill);          // Low Power Mode and some in-app browsers refuse autoplay
+    v.addEventListener("error", showStill);
+    v.addEventListener("playing", () => box.classList.remove("still"));
+    // Pause the film once it has scrolled away; resume when it returns.
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((es) => es.forEach((e) => {
+        if (box.classList.contains("still")) return;
+        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+      })).observe(box);
+    }
   })();
 
   /* ---------- invitation copy, both modes ---------- */
@@ -785,17 +516,22 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
     let html = "";
     L.invitation.forEach((para) => {
       let lines = para.slice();
+      if (lines[0] === "@address") {
+        const parts = C.addressLine.split(" - ");
+        html += '<p class="address">' + parts.map((x, i) => '<span class="nw">' + esc(x) + (i < parts.length - 1 ? " -" : "") + "</span>").join(" ") + "</p>";
+        return;
+      }
       if (lines[0] === "@film") { if (!C.filmLine) return; lines = lines.slice(1); }
-      html += "<p>" + lines.map((ln) => '<span class="line">' + esc(fill(ln, { address: C.address + ".", maps: "\u0000MAPS\u0000" })).replace("\u0000MAPS\u0000", mapsHtml()) + "</span>").join("") + "</p>";
+      html += "<p>" + lines.map((ln) => '<span class="line">' + esc(ln) + "</span>").join("") + "</p>";
     });
-    html += '<p class="signoff">' + L.signoff.map((ln) => '<span class="line">' + esc(ln) + "</span>").join("") + "</p>";
+    html += '<p class="signoff">' + esc(L.signoff) + "</p>";
     $("inviteLore").innerHTML = html;
 
     let rows = "";
     P.rows.forEach((r) => {
       let row = r.slice();
       if (row[0] === "@film") { if (!C.filmLine) return; row = row.slice(1); }
-      const val = esc(fill(row[1], { address: C.addressFull + ".", close: C.rsvpClose, maps: "\u0000MAPS\u0000" })).replace("\u0000MAPS\u0000", mapsHtml());
+      const val = row[1] === "@address" ? '<span class="addr">' + esc(C.addressFull) + "</span>" : esc(fill(row[1], { close: C.rsvpClose }));
       rows += "<tr><th>" + esc(row[0]) + "</th><td>" + val + "</td></tr>";
     });
     $("invitePlain").innerHTML = "<table>" + rows + "</table>";
@@ -804,14 +540,13 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
   function applyMode() {
     const T = C.copy[mode];
     const lore = mode === "lore";
-    document.body.classList.toggle("plain-mode", !lore);
     $("inviteLore").hidden = !lore;
     $("invitePlain").hidden = lore;
+    $("awaits").textContent = T.awaits;
     $("toggleText").textContent = T.toggle;
     $("toggleBtn").textContent = T.toggleButton;
     $("toggleBtn").setAttribute("aria-pressed", String(!lore));
-    $("cta").textContent = T.cta;
-    $("calLink").textContent = T.calendar;
+    $("cta").textContent = lastConfirm ? T.ctaDone : T.cta;
     $("formHeading").textContent = T.form.heading;
     $("labHousehold").textContent = T.form.household;
     $("household").placeholder = T.form.householdPlaceholder;
@@ -825,193 +560,26 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
     $("labOther").textContent = T.form.otherLabel;
     $("submitBtn").textContent = T.form.submit;
     $("smallPrint").textContent = fill(T.form.smallPrint, { close: C.rsvpClose });
-    $("receivedText").textContent = T.received;
     $("againBtn").textContent = T.again;
     $("shareLine").textContent = T.share;
     $("copyLink").textContent = T.copyLink;
-    $("previewNote").textContent = T.preview;
-    $("confirmPlain").hidden = lore;
-    if (lastConfirm) renderConfirm(lastConfirm);
-    renderCounter();
+    if (lastConfirm) renderConfirm(lastConfirm, false);
   }
   $("toggleBtn").addEventListener("click", () => { mode = mode === "lore" ? "plain" : "lore"; applyMode(); });
 
-  /* ---------- counter ---------- */
-  function renderCounter() {
-    const el = $("counter");
-    if (!agg) { el.textContent = C.copy.lore.empty; return; }
-    if (agg.households === 0) { el.textContent = mode === "lore" ? C.copy.lore.empty : "No RSVPs yet."; return; }
-    if (mode === "plain") {
-      el.textContent = agg.households + (agg.households === 1 ? " household" : " households") + " coming: " +
-        agg.adults + (agg.adults === 1 ? " adult" : " adults") + ", " + agg.children + (agg.children === 1 ? " child" : " children") + ".";
-      return;
-    }
-    const L = C.copy.lore;
-    el.textContent = fill(L.counter, {
-      N: agg.households, households: agg.households === 1 ? "household" : "households",
-      a: agg.alive, u: agg.undead, b: agg.between, c: agg.children,
-      other: agg.other > 0 ? fill(L.counterOther, { o: agg.other }) : ""
-    });
-  }
-
-  /* ---------- remarks ---------- */
-  (function remarks() {
-    const el = $("remark");
-    const pool = C.remarks.slice();
-    let order = [], i = 0;
-    const reshuffle = () => { order = pool.map((r, k) => k).sort(() => Math.random() - 0.5); i = 0; };
-    reshuffle();
-    const show = () => { el.textContent = pool[order[i]]; i = (i + 1) % order.length; if (i === 0) reshuffle(); };
-    show();
-    if (reduced || pool.length < 2) return;
-    setInterval(() => {
-      el.classList.add("out");
-      setTimeout(() => { show(); el.classList.remove("out"); }, 400);
-    }, C.remarkEvery);
-  })();
-
-  /* ---------- scene: lights, lawn, bats, flash ---------- */
-  const svg = $("grounds");
-  function setLights(n) {
-    const L = C.lights;
-    svg.classList.toggle("l-down", n >= L.downstairs);
-    svg.classList.toggle("l-up", n >= L.upstairs);
-    svg.classList.toggle("l-candle", n >= L.candle);
-    svg.classList.toggle("l-crows", n >= L.crows);
-    svg.classList.toggle("l-door", n >= L.door);
-  }
-  const slots = [].concat.apply([], C.bands.map((b) => b.slots));
-  const betweenTimers = [];
-  function figHtml(x, y, h, cond) {
-    const s = (h / 100).toFixed(3);
-    return '<g class="fig ' + cond + '" transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + s + ')">' +
-      '<g class="body" fill="#0B0B10"><circle cx="0" cy="-88" r="9.5"/>' +
-      '<path d="M-13,-78 L13,-78 L18,-40 L9,-40 L8,0 L2,0 L0,-28 L-2,0 L-8,0 L-9,-40 L-18,-40 Z"/></g>' +
-      '<circle class="lantern-glow" cx="23" cy="-46" r="16" fill="url(#lanternGlow)"/><circle class="lantern" cx="23" cy="-46" r="3.2" fill="#FFC266"/>' +
-      '<circle class="eye" cx="-3.6" cy="-89" r="2.6" fill="url(#eyeDot)"/><circle class="eye" cx="3.6" cy="-89" r="2.6" fill="url(#eyeDot)"/></g>';
-  }
-  function householdHtml(idx, rec) {
-    const slot = slots[idx]; if (!slot) return "";
-    const rnd = seeded(idx + 1 + rec.a * 7 + rec.c * 13);
-    const baseY = slot[1];
-    const adultH = 30 + (baseY - 300) * 0.28;
-    const members = [];
-    for (let k = 0; k < Math.min(rec.a, 8); k++) members.push({ h: adultH, adult: true });
-    for (let k = 0; k < Math.min(rec.c, 8); k++) members.push({ h: adultH * 0.66, adult: false });
-    const n = members.length;
-    const spread = Math.min(10, 6 + n * 1.2);
-    let inner = "";
-    members.forEach((m, k) => {
-      const x = slot[0] + (k - (n - 1) / 2) * spread + (rnd() - 0.5) * 4;
-      const y = baseY + (rnd() - 0.5) * 5;
-      const cond = rec.cond === "between" ? (rnd() < 0.5 ? "alive" : "undead") : rec.cond;
-      inner += figHtml(x, y, m.h, cond);
-    });
-    const dx = slot[0] < 240 ? -(slot[0] + 60) : (480 - slot[0] + 60);
-    return '<g class="hh" data-cond="' + esc(rec.cond) + '" style="--dx:' + dx + 'px">' + inner + "</g>";
-  }
-  function renderLawn(order, walkLast) {
-    betweenTimers.forEach(clearInterval); betweenTimers.length = 0;
-    const lawn = $("lawn");
-    let html = "";
-    order.slice(0, C.maxHouseholds).forEach((rec, i) => { html += householdHtml(i, rec); });
-    lawn.innerHTML = html;
-    const groups = lawn.querySelectorAll(".hh");
-    if (walkLast && !reduced && groups.length && order.length <= C.maxHouseholds) groups[groups.length - 1].classList.add("walk");
-    groups.forEach((g) => {
-      if (g.dataset.cond !== "between" || reduced) return;
-      const figs = g.querySelectorAll(".fig");
-      betweenTimers.push(setInterval(() => {
-        figs.forEach((f) => { const u = f.classList.contains("undead"); f.classList.toggle("undead", !u); f.classList.toggle("alive", u); });
-      }, 4000 + Math.random() * 2000));
-    });
-  }
-  function applyAggregate(a, walkLast) {
-    agg = a;
-    renderCounter();
-    setLights(a.households);
-    renderLawn(a.order || [], walkLast);
-  }
-
-  // bats
-  (function bats() {
-    if (reduced || params.has("og")) return;
-    const box = $("bats");
-    const glide = ["assets/bat-1.svg", "assets/bat-2.svg"], up = ["assets/bat-3.svg", "assets/bat-4.svg"];
-    function flight() {
-      const count = 2 + Math.floor(Math.random() * 3);
-      const ltr = Math.random() < 0.5;
-      for (let i = 0; i < count; i++) {
-        const img = document.createElement("img");
-        img.className = "bat"; img.alt = ""; img.decoding = "async";
-        const g = Math.floor(Math.random() * 2);
-        const w = 22 + Math.random() * 22;
-        img.width = w; img.src = glide[g];
-        const top = 8 + Math.random() * 30;
-        const W = box.clientWidth, H = box.clientHeight;
-        const x0 = ltr ? -60 : W + 60, x1 = ltr ? W + 60 : -60;
-        const y0 = H * top / 100, y1 = y0 + (Math.random() - 0.5) * 60;
-        const dur = 9000 + Math.random() * 6000;
-        img.style.transform = "translate(" + x0 + "px," + y0 + "px)" + (ltr ? "" : " scaleX(-1)");
-        box.appendChild(img);
-        const start = performance.now() + i * 900;
-        let flap = false, lastFlap = 0;
-        function step(t) {
-          if (t < start) { requestAnimationFrame(step); return; }
-          const p = Math.min(1, (t - start) / dur);
-          const x = x0 + (x1 - x0) * p, y = y0 + (y1 - y0) * p + Math.sin(p * 12) * 6;
-          img.style.transform = "translate(" + x + "px," + y + "px)" + (ltr ? "" : " scaleX(-1)");
-          if (t - lastFlap > 250) { flap = !flap; img.src = flap ? up[g] : glide[g]; lastFlap = t; }
-          if (p < 1) requestAnimationFrame(step); else img.remove();
-        }
-        requestAnimationFrame(step);
-      }
-      setTimeout(flight, 10000 + Math.random() * 10000);
-    }
-    setTimeout(flight, 2500 + Math.random() * 4000);
-  })();
-
-  if (!reduced && !params.has("og")) $("flash").classList.add("go");
-
   /* ---------- store ---------- */
-  function localLedger() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch (e) { return []; }
-  }
-  function aggregateOf(rows) {
-    const a = { households: rows.length, adults: 0, children: 0, alive: 0, undead: 0, between: 0, other: 0, order: [] };
-    rows.forEach((r) => { a.adults += r.a; a.children += r.c; a[r.cond] = (a[r.cond] || 0) + 1; a.order.push({ a: r.a, c: r.c, cond: r.cond }); });
-    return a;
-  }
-  function demoAggregate(n) {
-    const conds = ["alive", "undead", "alive", "between", "alive", "other", "undead", "alive"];
-    const rows = [];
-    for (let i = 0; i < n; i++) rows.push({ a: 1 + (i * 7) % 3, c: (i * 5) % 4, cond: conds[i % conds.length] });
-    return aggregateOf(rows);
-  }
-  async function readStore() {
-    if (params.has("demo")) return demoAggregate(Math.max(0, parseInt(params.get("demo"), 10) || 5));
-    if (previewMode) return aggregateOf(localLedger());
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 12000);
-    try {
-      const res = await fetch(C.endpoint + (C.endpoint.includes("?") ? "&" : "?") + "t=" + Date.now(), { signal: ctrl.signal, cache: "no-store" });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    } finally { clearTimeout(t); }
-  }
+  function localLedger() { try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch (e) { return []; } }
   async function writeStore(rec) {
     if (previewMode) {
       const rows = localLedger();
-      const dup = rows.some((r) => r.h.toLowerCase() === rec.household.toLowerCase() && Date.now() - r.t < 600000);
-      if (dup) return { ok: false, duplicate: true };
-      rows.push({ h: rec.household, a: rec.adults, c: rec.children, cond: rec.condition, t: Date.now() });
-      try { localStorage.setItem(LS_KEY, JSON.stringify(rows)); } catch (e) { /* storage blocked: still show success */ }
-      return { ok: true };
+      if (rows.some((r) => r.h.toLowerCase() === rec.household.toLowerCase() && Date.now() - r.t < 600000)) return { ok: false, duplicate: true };
+      rows.push({ h: rec.household, t: Date.now() });
+      try { localStorage.setItem(LS_KEY, JSON.stringify(rows)); } catch (e) { /* storage blocked */ }
+      return { ok: true, households: rows.length };
     }
     const body = JSON.stringify(rec);
-    // Apps Script answers through a redirect. A plain text body keeps the request simple (no preflight),
-    // and the final response carries CORS headers, so the JSON is readable. If the browser still refuses,
-    // fall back to an opaque request and treat completion as success.
+    // Apps Script answers through a redirect. A plain text body avoids a preflight and the final
+    // response is readable. If a browser refuses, send an opaque request and treat completion as success.
     try {
       const res = await fetch(C.endpoint, { method: "POST", body: body, redirect: "follow" });
       const txt = await res.text();
@@ -1023,7 +591,7 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
   }
 
   /* ---------- form ---------- */
-  function setCount(k, v) { counts[k] = Math.max(0, Math.min(8, v)); $(k + "Out").value = counts[k]; }
+  function setCount(k, v) { counts[k] = Math.max(0, Math.min(8, v)); $(k + "Out").value = counts[k]; $(k + "Out").textContent = counts[k]; }
   document.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => setCount(b.dataset.step, counts[b.dataset.step] + (+b.dataset.d))));
   document.querySelectorAll('input[name="condition"]').forEach((r) => r.addEventListener("change", () => {
     const other = r.value === "other" && r.checked;
@@ -1032,23 +600,29 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
   }));
   $("againBtn").addEventListener("click", () => {
     $("received").hidden = true; $("form").hidden = false;
-    $("household").value = ""; $("household").focus();
+    $("household").value = ""; $("formErr").textContent = "";
+    $("household").focus();
   });
 
-  let lastConfirm = null;
-  function renderConfirm(d) {
-    const L = C.copy.lore;
-    const orderLine = d.n <= 1 ? L.confirmOrder.first : d.n <= 3 ? L.confirmOrder.early : d.n <= 8 ? L.confirmOrder.middle : L.confirmOrder.late;
-    const h = d.household.replace(/^the\s+/i, "").replace(/\s+(party|family|household)$/i, "") || d.household;
-    $("confirmLore1").textContent = fill(orderLine, { h: h });
+  function renderConfirm(d, animate) {
+    const L = C.copy.lore, T = C.copy[mode], S = T.slip;
+    const short = d.household.replace(/^the\s+/i, "").replace(/\s+(party|family|household)$/i, "") || d.household;
+    const n = d.n;
+    $("stamp").textContent = S.stamp;
+    $("slipEntry").textContent = n ? fill(S.entry, { n: n }) : S.entryNoNumber;
+    $("slipWho").textContent = d.household;
+    const a = d.adults === 1 ? S.adultsOne : fill(S.adultsMany, { n: d.adults });
+    const c = d.children === 0 ? S.childrenNone : d.children === 1 ? S.childrenOne : fill(S.childrenMany, { n: d.children });
+    $("slipWhat").textContent = a + " · " + c + " · " + S.conditionNames[d.condition];
+    const orderLine = !n ? L.confirmOrder.unknown : n <= 1 ? L.confirmOrder.first : n <= 3 ? L.confirmOrder.early : n <= 8 ? L.confirmOrder.middle : L.confirmOrder.late;
+    $("confirmLore1").textContent = fill(orderLine, { h: short });
     $("confirmLore2").textContent = L.confirmCondition[d.condition];
-    $("confirmPlain").textContent = fill(C.copy.plain.confirm, {
-      h: d.household, a: d.adults, c: d.children, adultsWord: d.adults === 1 ? "adult" : "adults", childrenWord: d.children === 1 ? "child" : "children"
-    });
-    const plain = mode === "plain";
-    $("confirmPlain").hidden = !plain;
-    $("confirmLore1").classList.toggle("small", plain);
-    $("confirmLore2").classList.toggle("small", plain);
+    $("slipInk").textContent = fill(S.ink, { h: d.household });
+    $("cta").textContent = T.ctaDone;
+    if (animate && !reduced) {
+      const slip = $("slip");
+      slip.classList.remove("go", "thud"); void slip.offsetWidth; slip.classList.add("go", "thud");
+    }
   }
 
   $("form").addEventListener("submit", async (ev) => {
@@ -1065,34 +639,20 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
 
     const rec = { household: household, adults: counts.adults, children: counts.children, condition: condition, condition_other: other };
     const btn = $("submitBtn");
-    btn.disabled = true;
+    btn.disabled = true; btn.textContent = T.form.sending;
     let result;
     try { result = await writeStore(rec); } catch (e) { result = null; }
-    btn.disabled = false;
+    btn.disabled = false; btn.textContent = C.copy[mode].form.submit;
     if (!result) { err.textContent = T.errors.failed; return; }
     if (result.ok === false && result.duplicate) { err.textContent = T.duplicate; return; }
     if (result.ok === false) { err.textContent = T.errors.failed; return; }
 
-    // Add locally first; the Sheet may lag a few seconds.
-    const base = agg || aggregateOf([]);
-    const next = {
-      households: base.households + 1, adults: base.adults + rec.adults, children: base.children + rec.children,
-      alive: base.alive + (condition === "alive"), undead: base.undead + (condition === "undead"),
-      between: base.between + (condition === "between"), other: base.other + (condition === "other"),
-      order: (base.order || []).concat([{ a: rec.adults, c: rec.children, cond: condition }])
-    };
-    lastConfirm = { n: next.households, household: household, condition: condition, adults: rec.adults, children: rec.children };
+    lastConfirm = { n: result.households || 0, household: household, condition: condition, adults: rec.adults, children: rec.children };
     $("form").hidden = true;
     $("received").hidden = false;
-    renderConfirm(lastConfirm);
-    $("ctaWrap").hidden = true;
-    $("confirmWrap").hidden = false;
-    $("previewNote").hidden = !previewMode;
-    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-    applyAggregate(next, true);
-    if (!previewMode) setTimeout(async () => {
-      try { const fresh = await readStore(); if (fresh && fresh.households >= next.households) applyAggregate(fresh, false); } catch (e) { /* keep local */ }
-    }, 6000);
+    $("cta").classList.add("done");
+    renderConfirm(lastConfirm, true);
+    $("desk").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
   });
 
   $("copyLink").addEventListener("click", async () => {
@@ -1108,12 +668,6 @@ body.og .ledger, body.og .cta-wrap, body.og .invite-wrap, body.og .desk, body.og
   /* ---------- boot ---------- */
   renderInvitation();
   applyMode();
-  $("previewNote").hidden = !previewMode;
-  if (params.has("og")) { document.body.classList.add("og"); svg.setAttribute("viewBox", "-180 90 840 330"); }
-  readStore().then((a) => applyAggregate(a, false)).catch(() => {
-    $("counter").textContent = C.copy[mode].errors.fog;
-    setLights(0);
-  });
 })();
 </script>
 </body>

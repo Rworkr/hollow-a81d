@@ -1,13 +1,14 @@
 # The Hollow
 
-A single-page invitation and RSVP. One `index.html` with inline CSS and vanilla JavaScript, an `assets/` folder, and `og.jpg` for link previews. Hosted on GitHub Pages. RSVPs go to a Google Sheet through a Google Apps Script web app.
+A single-page invitation and RSVP. One `index.html` with inline CSS and vanilla JavaScript, a looping film in `assets/`, and `og.jpg` for link previews. Hosted on GitHub Pages. RSVPs go to a Google Sheet through a Google Apps Script web app.
 
 ## Files
 
 | File | What |
 | --- | --- |
 | `index.html` | The page. The `CONFIG` block at the top holds every date, name, string, threshold and endpoint. |
-| `assets/` | Silhouettes (SVG) and the creature's eyes (WebP). |
+| `assets/hollow.mp4` | The opening film: silent, 10 seconds, loops. |
+| `assets/hollow-still.jpg` | A still from the film, shown when a phone refuses to autoplay (for example iPhone Low Power Mode) or the viewer prefers reduced motion. |
 | `og.jpg` | 1200 × 630 link preview image. |
 | `store/Code.gs` | The Apps Script for the Sheet. Paste-in, not deployed from here. |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are. |
@@ -42,11 +43,6 @@ Until step 6 is done the page runs in preview mode: it says so under the counter
 - Delete the test rows from the Sheet (select the rows, right-click, delete rows). Reload the page.
 
 Suggested message: "You are expected. Lord and Lady Wenzel, of Shelley Hollow, require your particulars by Thursday: [link]"
-
-## Testing aids
-
-- `index.html?demo=20` shows the lawn with 20 pretend households and every light on, without touching the store. Any number works; `?demo=21` checks nothing breaks past the limit.
-- `index.html?og=1` renders the 1200 × 630 poster layout used for `og.jpg`.
 
 ## Reset for next year
 
