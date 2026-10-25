@@ -7,7 +7,7 @@ A single-page invitation and RSVP. One `index.html` with inline CSS and vanilla 
 | File | What |
 | --- | --- |
 | `index.html` | The page. The `CONFIG` block at the top holds every date, name, string, threshold and endpoint. |
-| `assets/hollow.mp4` | The opening film: silent, 10 seconds, loops. |
+| `assets/hollow.mp4` | The opening film, 10 seconds, loops silently. Its soundtrack plays once, from the top, on the guest's first tap while the film is in view, or from the Sound button. Browsers do not allow a page to start sound without a tap. |
 | `assets/hollow-still.jpg` | A still from the film, shown when a phone refuses to autoplay (for example iPhone Low Power Mode) or the viewer prefers reduced motion. |
 | `og.jpg` | 1200 × 630 link preview image. |
 | `store/Code.gs` | The Apps Script for the Sheet. Paste-in, not deployed from here. |
