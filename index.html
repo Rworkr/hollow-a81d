@@ -57,7 +57,8 @@ const CONFIG = {
   ambient: "assets/ambient.m4a",           // quiet eerie loop that follows the soundtrack
   ambientLevel: 0.85,                      // 0 to 1
   musicFadeAt: 8.6,                        // seconds into the film when the soundtrack starts fading out
-  autoScroll: true,                        // after the film's first full pass, glide down to the invitation
+  autoScroll: true,                        // glide down to the invitation after the film has played a while
+  autoScrollAfterLoops: 2,                 // how many passes of the 10-second film before the glide
 
   // Store. The Apps Script web app URL, ending in /exec.
   // Leave empty for preview mode: answers stay in this browser only.
@@ -68,7 +69,7 @@ const CONFIG = {
       awaits: "The Steward awaits your particulars.",
       soundOn: "Turn sound on", soundOff: "Mute",
       modeButton: "Speak plainly",
-      cue: "Scroll for your invitation",
+      cue: "Scroll for your destiny",
       late: "Until the living are exhausted, the dead are bored, or the sun comes for the vampires. Whichever comes first.",
       cta: "Surrender your particulars",
       ctaDone: "Particulars received",
@@ -252,6 +253,8 @@ button { font: inherit; }
 .bar-sound.on { border-color: var(--orange); color: var(--orange); }
 .bar-sound.on .waves { display: inline; }
 .bar-sound.on .cross { display: none; }
+.bar-sound.pending { animation: beckon 1.8s ease-in-out infinite; }
+@keyframes beckon { 0%, 100% { box-shadow: 0 0 0 0 rgba(242,128,30,0.55); } 50% { box-shadow: 0 0 0 7px rgba(242,128,30,0); } }
 
 /* ---------- Film with pinned headline ---------- */
 .hero { position: relative; background: var(--black); padding-bottom: var(--pin-tail); }
@@ -414,7 +417,7 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .film img, .bar, .bar-title, .cue { transition: none; }
-  .cue svg { animation: none; }
+  .cue svg, .bar-sound.pending { animation: none; }
   .slip.thud, .slip.go .stamp { animation: none; }
   .seven-wrap.armed .drip { transform: none; }
   .seven-wrap.go .drip, .seven-wrap.go .drop { animation: none; }
@@ -557,7 +560,7 @@ button { font: inherit; }
 </main>
 
 <a class="cue" id="cue" href="#awaits" hidden>
-  <span id="cueText">Scroll for your invitation</span>
+  <span id="cueText">Scroll for your destiny</span>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
 </a>
 
@@ -621,18 +624,22 @@ button { font: inherit; }
   }
 
   /* ---------- the film and its sound ---------- */
-  // Browsers never let a page start sound on its own. Sound starts on the guest's first tap anywhere,
-  // or from the speaker button. The soundtrack plays once from the top with the film, fades out over its
-  // last seconds and hands over to a quiet eerie loop that keeps going until muted. The film loops silently.
+  // Sound is on by default. Most phones refuse sound until the guest taps, so the page tries straight away,
+  // and if refused the speaker icon pulses and the first tap anywhere starts it. The soundtrack plays once
+  // with the film, fades out over its last seconds and hands over to a quiet eerie loop that keeps going
+  // until muted. The film itself loops silently.
   (function film() {
     const box = $("film"), v = $("video"), still = $("still"), btn = $("soundBtn");
     still.src = C.videoStill;
     const showStill = () => box.classList.add("still");
-    let soundOn = false;      // what the guest wants
+    let soundOn = true;       // what the guest wants; on by default
+    let audible = false;      // whether the browser has let us play sound yet
     let music = "idle";       // idle | playing | done
     let fading = false;
-    let ctx = null, master = null, musicGain = null, ambGain = null, ambBuf = null, ambSrc = null, webAudio = false;
+    let ctx = null, wired = false, master = null, musicGain = null, ambGain = null, ambBuf = null, ambSrc = null, webAudio = false;
     let ambData = null;
+    // iPhone: let sound play even with the ringer switch on silent (Safari 17 and later).
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* older Safari */ }
     // Fetch the ambient loop early; decode once the audio engine exists.
     if (window.fetch) fetch(C.ambient).then((r) => (r.ok ? r.arrayBuffer() : null)).then((b) => { ambData = b; decodeAmbient(); }).catch(() => {});
 
@@ -640,25 +647,27 @@ button { font: inherit; }
       if (!ctx || !ambData || ambBuf) return;
       const data = ambData; ambData = null;
       let settled = false;
-      const done = (buf) => { if (settled || !buf) return; settled = true; ambBuf = buf; if (soundOn && music === "done") startAmbient(); };
+      const done = (buf) => { if (settled || !buf) return; settled = true; ambBuf = buf; if (audible && soundOn && music === "done") startAmbient(); };
       try {
         const p = ctx.decodeAudioData(data, done, () => {});
         if (p && p.then) p.then(done).catch(() => {});
       } catch (e) { /* ambient is optional */ }
     }
-    function initAudio() {
+    function makeContext() {
       if (ctx || webAudio === null) return;
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) { webAudio = null; return; }
+      try { ctx = new AC(); decodeAmbient(); } catch (e) { webAudio = null; ctx = null; }
+    }
+    function wire() {
+      if (wired || !ctx) return;
       try {
-        ctx = new AC();
         master = ctx.createGain(); master.connect(ctx.destination);
         musicGain = ctx.createGain(); musicGain.connect(master);
         ambGain = ctx.createGain(); ambGain.gain.value = 0; ambGain.connect(master);
         ctx.createMediaElementSource(v).connect(musicGain);
-        webAudio = true;
-        decodeAmbient();
-      } catch (e) { webAudio = null; ctx = null; }
+        wired = true; webAudio = true;
+      } catch (e) { webAudio = null; }
     }
     function ramp(g, to, secs) {
       const t = ctx.currentTime;
@@ -677,15 +686,22 @@ button { font: inherit; }
     }
     function setUi() {
       const T = C.copy[mode];
+      const pending = soundOn && !audible;
       btn.classList.toggle("on", soundOn);
-      btn.setAttribute("aria-pressed", String(soundOn));
-      btn.setAttribute("aria-label", soundOn ? T.soundOff : T.soundOn);
+      btn.classList.toggle("pending", pending);
+      btn.setAttribute("aria-pressed", String(soundOn && audible));
+      btn.setAttribute("aria-label", soundOn && audible ? T.soundOff : T.soundOn);
     }
     window.__setSoundUi = setUi;
-    window.__soundState = () => ({ soundOn, music, webAudio, ambient: !!ambSrc,
+    window.__soundState = () => ({ soundOn, audible, music, webAudio, ambient: !!ambSrc,
       music_gain: musicGain ? +musicGain.gain.value.toFixed(2) : null, ambient_gain: ambGain ? +ambGain.gain.value.toFixed(2) : null,
       master: master ? +master.gain.value.toFixed(2) : null });
 
+    function blocked() {   // the browser refused sound: carry on silently and wait for a tap
+      audible = false; music = "idle";
+      v.muted = true; v.loop = true; setUi(); armTaps();
+      if (reduced) showStill(); else v.play().catch(showStill);
+    }
     function startMusic() {
       box.classList.remove("still");
       music = "playing"; fading = false;
@@ -693,7 +709,8 @@ button { font: inherit; }
       if (webAudio) { musicGain.gain.cancelScheduledValues(ctx.currentTime); musicGain.gain.setValueAtTime(1, ctx.currentTime); }
       try { v.currentTime = 0; } catch (e) { /* not seekable yet */ }
       const p = v.play();
-      if (p && p.catch) p.catch(() => { music = "idle"; soundOn = false; v.muted = true; v.loop = true; setUi(); if (reduced) showStill(); else v.play().catch(showStill); });
+      if (p && p.then) p.then(() => { audible = true; setUi(); disarm(); }).catch(blocked);
+      else { audible = true; setUi(); }
     }
     function musicEnded() {
       music = "done";
@@ -701,7 +718,6 @@ button { font: inherit; }
       try { v.currentTime = 0; } catch (e) {}
       if (reduced) { v.pause(); showStill(); } else v.play().catch(() => {});
       if (soundOn) startAmbient();
-      maybeAutoScroll();
     }
     v.addEventListener("timeupdate", () => {
       if (music !== "playing" || fading) return;
@@ -714,53 +730,63 @@ button { font: inherit; }
     });
     v.addEventListener("ended", () => { if (music === "playing") musicEnded(); });
 
-    function turnOn() {
-      initAudio();
-      if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
-      soundOn = true; setUi();
+    function turnOn() {                 // must run inside a tap
+      makeContext(); wire();
+      if (ctx && ctx.state !== "running") ctx.resume().catch(() => {});
+      soundOn = true;
       if (webAudio) ramp(master, 1, 0.25);
       if (music === "idle") startMusic();
-      else if (music === "done") startAmbient();
-      else v.muted = false;
+      else { audible = true; if (music === "done") startAmbient(); else v.muted = false; }
+      setUi();
     }
     function turnOff() {
       soundOn = false; setUi();
       if (webAudio) ramp(master, 0, 0.25); else v.muted = true;
     }
-    btn.addEventListener("click", () => { if (soundOn) turnOff(); else turnOn(); });
+    btn.addEventListener("click", () => { if (soundOn && audible) turnOff(); else turnOn(); });
 
-    // The first tap anywhere turns the sound on, once.
+    // While sound is wanted but not yet allowed, the first tap anywhere starts it.
     const tapEvents = ["pointerup", "touchend", "keydown", "click"];
     function firstTap(e) {
-      if (e.target && e.target.closest && e.target.closest("#soundBtn")) { disarm(); return; }
+      if (e.target && e.target.closest && e.target.closest("#soundBtn")) return;   // the button handles itself
       if (e.type === "keydown" && (e.key === "Tab" || e.key === "Escape" || e.key === "Shift")) return;
-      disarm();
-      if (!soundOn && music === "idle") turnOn();
+      if (soundOn && !audible) turnOn();
     }
-    function disarm() { tapEvents.forEach((t) => document.removeEventListener(t, firstTap, true)); }
-    tapEvents.forEach((t) => document.addEventListener(t, firstTap, { capture: true, passive: true }));
+    let armed = false;
+    function armTaps() { if (armed) return; armed = true; tapEvents.forEach((t) => document.addEventListener(t, firstTap, { capture: true, passive: true })); }
+    function disarm() { armed = false; tapEvents.forEach((t) => document.removeEventListener(t, firstTap, true)); }
 
     // Quiet when the tab is hidden.
     document.addEventListener("visibilitychange", () => {
       if (!ctx) return;
-      if (document.hidden) ctx.suspend().catch(() => {}); else if (soundOn) ctx.resume().catch(() => {});
+      if (document.hidden) ctx.suspend().catch(() => {}); else if (soundOn && audible) ctx.resume().catch(() => {});
     });
 
-    // Count how much of the film has been seen, so the page can glide down after one full pass.
+    // Count how much of the film has been seen, so the page can glide down after a couple of passes.
     let seen = 0, lastT = 0;
     v.addEventListener("timeupdate", () => {
       const t = v.currentTime, dt = t - lastT; lastT = t;
       if (dt > 0 && dt < 1.5) seen += dt;
-      if (seen >= (v.duration || 10) - 0.3 && music !== "playing") maybeAutoScroll();
+      if (seen >= C.autoScrollAfterLoops * (v.duration || 10) - 0.4 && music !== "playing") maybeAutoScroll();
     });
 
     setUi();
-    if (reduced) { v.removeAttribute("autoplay"); v.pause(); v.preload = "metadata"; showStill(); return; }
-    v.muted = true;
-    const p = v.play();
-    if (p && p.catch) p.catch(() => { showStill(); setTimeout(maybeAutoScroll, 6000); });
-    v.addEventListener("error", () => { showStill(); setTimeout(maybeAutoScroll, 6000); });
+    v.addEventListener("error", () => { showStill(); setTimeout(maybeAutoScroll, 12000); });
     v.addEventListener("playing", () => box.classList.remove("still"));
+    if (reduced) {
+      v.removeAttribute("autoplay"); v.pause(); v.preload = "metadata"; showStill();
+      audible = false; setUi(); armTaps();
+      return;
+    }
+    // Try for sound straight away. Where the browser allows it (some desktops), the soundtrack starts now.
+    makeContext();
+    if (ctx && ctx.state === "running") { wire(); startMusic(); }
+    else {
+      armTaps();
+      v.muted = true;
+      const p = v.play();
+      if (p && p.catch) p.catch(() => { showStill(); setTimeout(maybeAutoScroll, 12000); });
+    }
     // Pause the film once it has scrolled away, unless its soundtrack is still playing.
     if ("IntersectionObserver" in window) {
       new IntersectionObserver((es) => es.forEach((e) => {
