@@ -38,7 +38,7 @@ Until step 6 is done the page runs in preview mode: it says so under the counter
 
 ### 3. Test before sending
 
-- Open the page on your phone. Send a test RSVP. Check the row appears in the Sheet and the figures appear on the lawn.
+- Open the page on your phone. Send a test RSVP. Check the admission slip appears and the row lands in the Sheet.
 - Send the link to yourself on WhatsApp and iMessage. The preview should show the image and the title. WhatsApp caches previews, so add `?v=2` to the link while testing.
 - Delete the test rows from the Sheet (select the rows, right-click, delete rows). Reload the page.
 
